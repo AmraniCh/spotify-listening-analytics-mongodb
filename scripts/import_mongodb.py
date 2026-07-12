@@ -22,4 +22,5 @@ db['utilisateurs'].insert_many(users)
 
 print(f"ecoutes: {db['ecoutes'].count_documents({})}")
 print(f"utilisateurs: {db['utilisateurs'].count_documents({})}")
-print(f"saved to {LISTENS_PATH}")
+print("Import completed!")
+
