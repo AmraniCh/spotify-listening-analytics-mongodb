@@ -1,0 +1,74 @@
+
+==================================================
+Overview
+==================================================
+Rows: 149860
+Oldest listen: 2013-07-08 02:44:34
+Most recent listen: 2024-12-15 23:06:25
+Columns: ['spotify_track_uri', 'ts', 'platform', 'ms_played', 'track_name', 'artist_name', 'album_name', 'reason_start', 'reason_end', 'shuffle', 'skipped']
+
+==================================================
+Missing values
+==================================================
+spotify_track_uri      0
+ts                     0
+platform               0
+ms_played              0
+track_name             0
+artist_name            0
+album_name             0
+reason_start         143
+reason_end           117
+shuffle                0
+skipped                0
+dtype: int64
+
+==================================================
+Cardinality
+==================================================
+Unique tracks: 16527
+Unique artists: 4113
+Unique albums: 7948
+
+==================================================
+Platforms
+==================================================
+platform
+android           93.3
+cast to device     2.6
+iOS                2.0
+windows            1.1
+mac                0.8
+web player         0.2
+Name: proportion, dtype: float64
+
+==================================================
+Listens per year
+==================================================
+ts
+2013      185
+2014       23
+2015     2809
+2016     6413
+2017    26320
+2018    14817
+2019    14927
+2020    24280
+2021    22991
+2022    16202
+2023    11023
+2024     9870
+Name: count, dtype: int64
+
+==================================================
+Behavior (Skip/Shuffle)
+==================================================
+skipped
+False    0.9
+True     0.1
+Name: proportion, dtype: float64
+
+shuffle
+True     0.7
+False    0.3
+Name: proportion, dtype: float64
