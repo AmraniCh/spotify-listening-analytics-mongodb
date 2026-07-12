@@ -7,7 +7,7 @@ SAMPLE_PATH = "data/processed/sample.csv"
 GENRES_PATH = "data/processed/artist_genres.json"
 OUTPUT_PATH = "data/processed/listens.json"
 
-N_USERS = 4
+N_USERS = 16
 UNKNOWN = "Unknown"
 
 
