@@ -1,15 +1,9 @@
-"""Count tag frequency across all artists to derive the genre whitelist.
-
-Reads the cache built by 03a. Makes no API calls.
-"""
-
 import json
 from collections import Counter
 from pathlib import Path
 
 CACHE_PATH = "data/processed/artist_tags.json"
 TOP_N = 60
-
 
 if __name__ == "__main__":
     cache = json.loads(Path(CACHE_PATH).read_text(encoding="utf-8"))
