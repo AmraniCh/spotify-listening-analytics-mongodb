@@ -1,6 +1,6 @@
 import altair as alt
 import streamlit as st
-from mongo_queries import kpis, monthly_evolution, top_tracks, top_artists, listening_time_by_genre, listens_by_hour, platform_split, favorite_genre_per_user
+from mongo_queries import kpis, monthly_evolution, top_tracks, top_artists, listening_time_by_genre, listens_by_hour, platform_split, favorite_genre_per_user, replay_rate
 
 st.set_page_config(page_title="Spotify Analytics", layout="wide")
 
@@ -260,3 +260,27 @@ with tab3:
     )
 
     st.altair_chart(chart_fav, use_container_width=True)
+
+    st.divider()
+
+    st.subheader("Taux de réécoute — morceaux les plus populaires")
+
+    df_replay = replay_rate()
+
+    st.dataframe(
+        df_replay,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "titre": "Morceau",
+            "artiste": "Artiste",
+            "nb_ecoutes": st.column_config.NumberColumn("Écoutes"),
+            "nb_utilisateurs": st.column_config.NumberColumn("Utilisateurs"),
+            "taux_reecoute": st.column_config.ProgressColumn(
+                "Taux de réécoute",
+                format="%.2f",
+                min_value=0,
+                max_value=float(df_replay["taux_reecoute"].max()),
+            ),
+        },
+    )

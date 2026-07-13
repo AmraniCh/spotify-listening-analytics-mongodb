@@ -142,3 +142,33 @@ def favorite_genre_per_user() -> pd.DataFrame:
         }
         for r in rows
     ])
+
+@st.cache_data
+def replay_rate(limit: int = 10) -> pd.DataFrame:
+    pipeline = [
+        {"$group": {
+            "_id": {"titre": "$morceau.titre", "artiste": "$morceau.artiste"},
+            "nb_ecoutes": {"$sum": 1},
+            "utilisateurs_distincts": {"$addToSet": "$id_utilisateur"},
+        }},
+        {"$project": {
+            "nb_ecoutes": 1,
+            "nb_utilisateurs": {"$size": "$utilisateurs_distincts"},
+            "taux_reecoute": {
+                "$divide": ["$nb_ecoutes", {"$size": "$utilisateurs_distincts"}]
+            },
+        }},
+        {"$sort": {"nb_ecoutes": -1}},
+        {"$limit": limit},
+    ]
+    rows = list(get_db().ecoutes.aggregate(pipeline))
+    return pd.DataFrame([
+        {
+            "titre": r["_id"]["titre"],
+            "artiste": r["_id"]["artiste"],
+            "nb_ecoutes": r["nb_ecoutes"],
+            "nb_utilisateurs": r["nb_utilisateurs"],
+            "taux_reecoute": round(r["taux_reecoute"], 2),
+        }
+        for r in rows
+    ])
