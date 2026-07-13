@@ -1,6 +1,6 @@
 import altair as alt
 import streamlit as st
-from mongo_queries import kpis, monthly_evolution, top_tracks, top_artists, listening_time_by_genre, listens_by_hour
+from mongo_queries import kpis, monthly_evolution, top_tracks, top_artists, listening_time_by_genre, listens_by_hour, platform_split
 
 st.set_page_config(page_title="Spotify Analytics", layout="wide")
 
@@ -42,7 +42,7 @@ st.markdown(
 )
 
 st.markdown(
-    "<h1 style='color:#1DB954; margin-bottom:1.5rem;'>Spotify Listening Analytics</h1>",
+    "<h1 style='color:#9DECB9; margin-bottom:1.5rem;'>Spotify Listening Analytics</h1>",
     unsafe_allow_html=True,
 )
 
@@ -140,6 +140,36 @@ with tab1:
 
         st.altair_chart(chart, use_container_width=True)
 
+    st.divider()
+
+    st.subheader("Répartition par plateforme")
+
+    df_plat = platform_split()
+
+    chart_plat = (
+        alt.Chart(df_plat)
+        .mark_arc(innerRadius=70, stroke="#FFFFFF", strokeWidth=2)
+        .encode(
+            theta=alt.Theta("nb_ecoutes:Q"),
+            color=alt.Color(
+                "plateforme:N",
+                title=None,
+                scale=alt.Scale(range=[
+                    "#9DECB9", "#4FD17E", "#8AE5AC",
+                    "#C7F9D9", "#E3FCEC", "#F2FEF7",
+                ]),
+            ),
+            tooltip=[
+                alt.Tooltip("plateforme", title="Plateforme"),
+                alt.Tooltip("nb_ecoutes", title="Écoutes"),
+            ],
+        )
+        .properties(height=320)
+        .configure_view(stroke=None)
+    )
+
+    st.altair_chart(chart_plat, use_container_width=True)
+
 
 with tab2:
     st.subheader("Écoutes par heure")
@@ -192,6 +222,8 @@ with tab2:
     )
 
     st.altair_chart(chart_genre, use_container_width=True)
+
+
 
 # with tab3:
 #     # genre préféré par user + taux de réécoute

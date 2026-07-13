@@ -106,3 +106,14 @@ def listens_by_hour() -> pd.DataFrame:
         .reindex(range(24), fill_value=0)
         .reset_index()
     )
+
+@st.cache_data
+def platform_split() -> pd.DataFrame:
+    pipeline = [
+        {"$group": {"_id": "$plateforme", "nb_ecoutes": {"$sum": 1}}},
+        {"$sort": {"nb_ecoutes": -1}},
+    ]
+    rows = list(get_db().ecoutes.aggregate(pipeline))
+    return pd.DataFrame([
+        {"plateforme": r["_id"], "nb_ecoutes": r["nb_ecoutes"]} for r in rows
+    ])
