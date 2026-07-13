@@ -1,6 +1,6 @@
 import altair as alt
 import streamlit as st
-from mongo_queries import kpis, top_tracks, top_artists, monthly_evolution
+from mongo_queries import kpis, monthly_evolution, top_tracks, top_artists, listening_time_by_genre
 
 st.set_page_config(page_title="Spotify Analytics", layout="wide")
 
@@ -63,12 +63,12 @@ df_monthly = monthly_evolution()
 chart_monthly = (
     alt.Chart(df_monthly)
     .mark_area(
-        line={"color": "#1AA34A", "strokeWidth": 2},
+        line={"color": "#c7f9d9", "strokeWidth": 2},
         color=alt.Gradient(
             gradient="linear",
             stops=[
                 alt.GradientStop(color="#FFFFFF", offset=0),
-                alt.GradientStop(color="#1AA34A", offset=1),
+                alt.GradientStop(color="#c7f9d9", offset=1),
             ],
             x1=1, x2=1, y1=1, y2=0,
         ),
@@ -138,3 +138,30 @@ with right:
     st.altair_chart(chart, use_container_width=True)
 
 
+
+st.subheader("Temps d'écoute par genre")
+
+df_genre = listening_time_by_genre()
+
+base_genre = alt.Chart(df_genre).encode(
+    x=alt.X("heures:Q", title=None, axis=None),
+    y=alt.Y("genre:N", sort="-x", title=None),
+    tooltip=[
+        alt.Tooltip("genre", title="Genre"),
+        alt.Tooltip("heures", title="Heures"),
+    ],
+)
+
+bars_genre = base_genre.mark_bar(color="#c7f9d9", cornerRadiusEnd=4)
+labels_genre = base_genre.mark_text(align="left", dx=6, fontSize=12).encode(
+    text=alt.Text("heures:Q", format=".0f")
+)
+
+chart_genre = (
+    (bars_genre + labels_genre)
+    .properties(height=520)
+    .configure_axis(grid=False, domain=False, ticks=False)
+    .configure_view(stroke=None)
+)
+
+st.altair_chart(chart_genre, use_container_width=True)
