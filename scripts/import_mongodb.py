@@ -1,10 +1,13 @@
 from bson import json_util
 from pymongo import MongoClient
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
-MONGO_URI = "mongodb://localhost:27017"
+load_dotenv()
+
+MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = "streaming"
-
 LISTENS_PATH = "data/processed/listens.json"
 USERS_PATH = "data/processed/users.json"
 
