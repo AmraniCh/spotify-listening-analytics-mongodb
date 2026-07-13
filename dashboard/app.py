@@ -56,19 +56,24 @@ c4.metric(":material/schedule: Heures écoutées", f"{k['heures']:,.0f}".replace
 
 st.divider()
 
-# st.subheader("Top 10 artistes")
+st.subheader("Top 10 artistes")
 
-# df = top_artists()
+df = top_artists()
 
-# chart = (
-#     alt.Chart(df)
-#     .mark_bar(color="#1DB954")
-#     .encode(
-#         x=alt.X("nb_ecoutes:Q", title=None),
-#         y=alt.Y("artiste:N", sort="-x", title=None),
-#         tooltip=["artiste", "nb_ecoutes"],
-#     )
-#     .properties(height=320)
-# )
+base = alt.Chart(df).encode(
+    x=alt.X("nb_ecoutes:Q", title=None),
+    y=alt.Y("artiste:N", sort="-x", title=None),
+    tooltip=["artiste", "nb_ecoutes"],
+)
 
-# st.altair_chart(chart, use_container_width=True)
+bars = base.mark_bar(color="#89F2AE79")
+labels = base.mark_text(align="left", dx=6).encode(text="nb_ecoutes:Q")
+
+chart = (
+    (bars + labels)
+    .properties(height=320)
+    .configure_axis(grid=False, domain=False, ticks=False)
+    .configure_view(stroke=None)
+)
+
+st.altair_chart(chart, use_container_width=True)
