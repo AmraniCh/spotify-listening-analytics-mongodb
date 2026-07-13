@@ -1,11 +1,10 @@
-# Spotify Listening Analytics — MongoDB
+# Spotify Listening Analytics With MongoDB
 
-NoSQL mini-project (MGO-6). Modeling and analyzing a Spotify listening history with MongoDB.
+MongoDB data modeling and analysis of a Spotify listening history, with a Streamlit dashboard. NoSQL master's project.
 
 **Live dashboard:** https://spotify-listening-analytics-app.streamlit.app
 
-Master Informatique et Télécommunications, Université Mohammed V de Rabat.
-By Chaymae Benrhanem and Chakir El Amrani.
+*Master Informatique et Télécommunications, Université Mohammed V de Rabat — Chaymae Benrhanem, Chakir El Amrani*
 
 ## Context
 
@@ -13,7 +12,7 @@ A music streaming platform wants to understand how its users listen: which artis
 
 ## Dataset
 
-[Spotify Streaming History](https://www.kaggle.com/) from Kaggle. 149,860 listening events between 2013 and 2024. One row is one listening event, not one track.
+[Spotify Streaming History](https://www.kaggle.com/datasets/arshmankhalid/shopify-streaming-history-dataset) from Kaggle. 149,860 listening events between 2013 and 2024. One row is one listening event, not one track.
 
 The dataset had three gaps, and each one required a decision:
 
