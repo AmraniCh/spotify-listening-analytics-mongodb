@@ -21,6 +21,21 @@ st.markdown(
         letter-spacing: -0.02em;
         margin-bottom: 1.5rem;
     }
+    
+    [data-testid="stMetric"] {
+        padding: 1.25rem 1.5rem;
+        border-radius: 12px;
+    }
+
+    [data-testid="stMetricValue"] {
+        font-size: 2.4rem;
+        font-weight: 600;
+    }
+
+    [data-testid="stMetricLabel"] p {
+        font-size: 0.95rem;
+        opacity: 0.65;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -34,10 +49,10 @@ st.markdown(
 k = kpis()
 
 c1, c2, c3, c4 = st.columns(4, gap="medium")
-c1.metric("Écoutes", f"{k['ecoutes']:,}".replace(",", " "), border=True)
-c2.metric("Artistes", f"{k['artistes']:,}".replace(",", " "), border=True)
-c3.metric("Morceaux", f"{k['morceaux']:,}".replace(",", " "), border=True)
-c4.metric("Heures écoutées", f"{k['heures']:,.0f}".replace(",", " "), border=True)
+c1.metric(":material/play_circle: Écoutes", f"{k['ecoutes']:,}".replace(",", " "), border=True)
+c2.metric(":material/mic: Artistes", f"{k['artistes']:,}".replace(",", " "), border=True)
+c3.metric(":material/music_note: Morceaux", f"{k['morceaux']:,}".replace(",", " "), border=True)
+c4.metric(":material/schedule: Heures écoutées", f"{k['heures']:,.0f}".replace(",", " "), border=True)
 
 st.divider()
 
