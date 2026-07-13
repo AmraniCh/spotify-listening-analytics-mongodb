@@ -1,11 +1,7 @@
-// =====================================================
 // CRUD — collection "ecoutes"
-// Exécution : docker exec -i mongo mongosh streaming < queries/crud.js
-// =====================================================
+// docker exec -i mongo mongosh streaming < queries/crud.js
 
-// -----------------------------------------------------
-// CREATE — ajouter une nouvelle écoute
-// -----------------------------------------------------
+// CREATE
 db.ecoutes.insertOne({
   _id: "eco_99998",
   id_utilisateur: "user_01",
@@ -25,18 +21,15 @@ db.ecoutes.insertOne({
   date_ecoute: ISODate("2024-12-16T10:30:00Z")
 });
 
-// -----------------------------------------------------
-// READ — rechercher les écoutes
-// -----------------------------------------------------
-// ... par artisteid_
+// READ — par artiste
 db.ecoutes.find({ "morceau.artiste": "The Killers" }).limit(5);
 db.ecoutes.countDocuments({ "morceau.artiste": "The Killers" });
 
-// ... par genre
+// READ — par genre
 db.ecoutes.find({ "morceau.genre": "rock" }).limit(5);
 db.ecoutes.countDocuments({ "morceau.genre": "rock" });
 
-// ... par période (année 2024)
+// READ — par période (2024)
 db.ecoutes.countDocuments({
   date_ecoute: {
     $gte: ISODate("2024-01-01"),
@@ -44,23 +37,14 @@ db.ecoutes.countDocuments({
   }
 });
 
-// -----------------------------------------------------
-// UPDATE — modifier les métadonnées d'un morceau
-//
-// Le morceau étant imbriqué, ses métadonnées sont dupliquées
-// dans chaque écoute : la correction touche donc N documents.
-// C'est le coût assumé du choix d'imbrication.
-// -----------------------------------------------------
+// UPDATE — le morceau étant imbriqué, ses métadonnées sont dupliquées
+// dans chaque écoute : la correction touche N documents.
 db.ecoutes.updateMany(
   { spotify_track_uri: "0eGsygTp906u18L0Oimnem" },
   { $set: { "morceau.genre": "alternative" } }
 );
 
-// -----------------------------------------------------
-// DELETE — supprimer les écoutes d'un utilisateur
-//
-// MongoDB ne fait aucune cascade : le document de la collection
-// "utilisateurs" reste intact et doit être supprimé séparément.
-// -----------------------------------------------------
+// DELETE — pas de cascade en MongoDB : le document utilisateur
+// doit être supprimé séparément.
 db.ecoutes.deleteMany({ id_utilisateur: "user_16" });
 db.utilisateurs.deleteOne({ _id: "user_16" });
