@@ -1,8 +1,12 @@
 import pandas as pd
 import streamlit as st
 from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
 
-MONGO_URI = "mongodb://localhost:27017"
+load_dotenv()
+
+MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = "streaming"
 
 
