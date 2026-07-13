@@ -1,5 +1,5 @@
 pandas
 requests
 python-dotenv
-pymongo
+pymongo[srv]
 streamlit
