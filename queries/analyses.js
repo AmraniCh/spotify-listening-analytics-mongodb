@@ -1,3 +1,5 @@
+// Exécution : docker exec -i mongo mongosh streaming < queries/analyses.js
+
 // 1. Morceaux les plus écoutés
 db.ecoutes.aggregate([
   { $group: {
