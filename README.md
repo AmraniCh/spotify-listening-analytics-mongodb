@@ -4,7 +4,8 @@ MongoDB data modeling and analysis of a Spotify listening history, with a Stream
 
 **Live dashboard:** https://spotify-listening-analytics-app.streamlit.app
 
-*Master Informatique et Télécommunications, Université Mohammed V de Rabat — Chaymae Benrhanem, Chakir El Amrani*
+*Master's in Computer Science and Telecommunications | Université Mohammed V de Rabat*
+*Chaymae Benrhanem, Chakir El Amrani*
 
 ## Context
 
