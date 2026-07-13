@@ -1,6 +1,6 @@
 import altair as alt
 import streamlit as st
-from mongo_queries import kpis, monthly_evolution, top_tracks, top_artists, listening_time_by_genre, listens_by_hour, platform_split
+from mongo_queries import kpis, monthly_evolution, top_tracks, top_artists, listening_time_by_genre, listens_by_hour, platform_split, favorite_genre_per_user
 
 st.set_page_config(page_title="Spotify Analytics", layout="wide")
 
@@ -224,6 +224,39 @@ with tab2:
     st.altair_chart(chart_genre, use_container_width=True)
 
 
+with tab3:
+    st.subheader("Genre préféré par utilisateur")
 
-# with tab3:
-#     # genre préféré par user + taux de réécoute
+    df_fav = favorite_genre_per_user()
+
+    base_fav = alt.Chart(df_fav).encode(
+        x=alt.X("nb_ecoutes:Q", title=None, axis=None),
+        y=alt.Y("utilisateur:N", sort=None, title=None),
+        color=alt.Color(
+            "genre_prefere:N",
+            title="Genre",
+            scale=alt.Scale(range=[
+                "#C7F9D9", "#8AE5AC", "#4FD17E", "#1AA34A",
+                "#E3FCEC", "#A8EFC4", "#6BDB95", "#0E7A36",
+            ]),
+        ),
+        tooltip=[
+            alt.Tooltip("utilisateur", title="Utilisateur"),
+            alt.Tooltip("genre_prefere", title="Genre préféré"),
+            alt.Tooltip("nb_ecoutes", title="Écoutes"),
+        ],
+    )
+
+    bars_fav = base_fav.mark_bar(cornerRadiusEnd=4)
+    labels_fav = base_fav.mark_text(align="left", dx=6, fontSize=12).encode(
+        text="genre_prefere:N", color=alt.value("#191414")
+    )
+
+    chart_fav = (
+        (bars_fav + labels_fav)
+        .properties(height=480)
+        .configure_axis(grid=False, domain=False, ticks=False)
+        .configure_view(stroke=None)
+    )
+
+    st.altair_chart(chart_fav, use_container_width=True)

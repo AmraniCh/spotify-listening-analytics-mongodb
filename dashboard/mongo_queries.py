@@ -117,3 +117,28 @@ def platform_split() -> pd.DataFrame:
     return pd.DataFrame([
         {"plateforme": r["_id"], "nb_ecoutes": r["nb_ecoutes"]} for r in rows
     ])
+
+@st.cache_data
+def favorite_genre_per_user() -> pd.DataFrame:
+    pipeline = [
+        {"$group": {
+            "_id": {"utilisateur": "$id_utilisateur", "genre": "$morceau.genre"},
+            "nb": {"$sum": 1},
+        }},
+        {"$sort": {"_id.utilisateur": 1, "nb": -1}},
+        {"$group": {
+            "_id": "$_id.utilisateur",
+            "genre_prefere": {"$first": "$_id.genre"},
+            "nb_ecoutes": {"$first": "$nb"},
+        }},
+        {"$sort": {"_id": 1}},
+    ]
+    rows = list(get_db().ecoutes.aggregate(pipeline))
+    return pd.DataFrame([
+        {
+            "utilisateur": r["_id"],
+            "genre_prefere": r["genre_prefere"],
+            "nb_ecoutes": r["nb_ecoutes"],
+        }
+        for r in rows
+    ])
