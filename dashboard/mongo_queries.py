@@ -32,6 +32,26 @@ def kpis() -> dict:
     return list(get_db().ecoutes.aggregate(pipeline))[0]
 
 @st.cache_data
+def top_tracks(limit: int = 10) -> pd.DataFrame:
+    pipeline = [
+        {"$group": {
+            "_id": {"titre": "$morceau.titre", "artiste": "$morceau.artiste"},
+            "nb_ecoutes": {"$sum": 1},
+        }},
+        {"$sort": {"nb_ecoutes": -1}},
+        {"$limit": limit},
+    ]
+    rows = list(get_db().ecoutes.aggregate(pipeline))
+    return pd.DataFrame([
+        {
+            "titre": r["_id"]["titre"],
+            "artiste": r["_id"]["artiste"],
+            "nb_ecoutes": r["nb_ecoutes"],
+        }
+        for r in rows
+    ])
+
+@st.cache_data
 def top_artists(limit: int = 10) -> pd.DataFrame:
     pipeline = [
         {"$group": {"_id": "$morceau.artiste", "nb_ecoutes": {"$sum": 1}}},
@@ -42,3 +62,21 @@ def top_artists(limit: int = 10) -> pd.DataFrame:
     return pd.DataFrame(
         [{"artiste": r["_id"], "nb_ecoutes": r["nb_ecoutes"]} for r in rows]
     )
+
+
+@st.cache_data
+def monthly_evolution() -> pd.DataFrame:
+    pipeline = [
+        {"$group": {
+            "_id": {"annee": {"$year": "$date_ecoute"}, "mois": {"$month": "$date_ecoute"}},
+            "nb_ecoutes": {"$sum": 1},
+        }},
+        {"$sort": {"_id.annee": 1, "_id.mois": 1}},
+    ]
+    rows = list(get_db().ecoutes.aggregate(pipeline))
+    df = pd.DataFrame([
+        {"year": r["_id"]["annee"], "month": r["_id"]["mois"], "nb_ecoutes": r["nb_ecoutes"]}
+        for r in rows
+    ])
+    df["date"] = pd.to_datetime(df.assign(day=1)[["year", "month", "day"]])
+    return df
