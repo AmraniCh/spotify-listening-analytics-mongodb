@@ -93,3 +93,16 @@ def listening_time_by_genre() -> pd.DataFrame:
         for r in rows
     ])
 
+@st.cache_data
+def listens_by_hour() -> pd.DataFrame:
+    pipeline = [
+        {"$group": {"_id": {"$hour": "$date_ecoute"}, "nb_ecoutes": {"$sum": 1}}},
+        {"$sort": {"_id": 1}},
+    ]
+    rows = list(get_db().ecoutes.aggregate(pipeline))
+    return (
+        pd.DataFrame([{"heure": r["_id"], "nb_ecoutes": r["nb_ecoutes"]} for r in rows])
+        .set_index("heure")
+        .reindex(range(24), fill_value=0)
+        .reset_index()
+    )

@@ -1,6 +1,6 @@
 import altair as alt
 import streamlit as st
-from mongo_queries import kpis, monthly_evolution, top_tracks, top_artists, listening_time_by_genre
+from mongo_queries import kpis, monthly_evolution, top_tracks, top_artists, listening_time_by_genre, listens_by_hour
 
 st.set_page_config(page_title="Spotify Analytics", layout="wide")
 
@@ -142,6 +142,30 @@ with tab1:
 
 
 with tab2:
+    st.subheader("Écoutes par heure")
+
+    df_hour = listens_by_hour()
+
+    chart_hour = (
+        alt.Chart(df_hour)
+        .mark_bar(color="#c7f9d9", cornerRadiusEnd=4)
+        .encode(
+            x=alt.X("heure:O", title=None),
+            y=alt.Y("nb_ecoutes:Q", title=None),
+            tooltip=[
+                alt.Tooltip("heure", title="Heure"),
+                alt.Tooltip("nb_ecoutes", title="Écoutes"),
+            ],
+        )
+        .properties(height=300)
+        .configure_axis(grid=False, domain=False, ticks=False)
+        .configure_view(stroke=None)
+    )
+
+    st.altair_chart(chart_hour, use_container_width=True)
+
+    st.divider()
+
     st.subheader("Temps d'écoute par genre")
 
     df_genre = listening_time_by_genre()
