@@ -5,9 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("LASTFM_API_KEY")
-
-
-API_KEY = os.getenv("LASTFM_API_KEY")
 BASE_URL = "http://ws.audioscrobbler.com/2.0/"
 
 ARTIST = "The Beatles"
