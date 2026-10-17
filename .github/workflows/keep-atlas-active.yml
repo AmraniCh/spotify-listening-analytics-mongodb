@@ -1,0 +1,15 @@
+name: keep atlas active
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"   # every Monday at 08:00 UTC
+  workflow_dispatch:       # lets you run it by hand to test
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: pip install pymongo dnspython
+      - run: python -c "import os; from pymongo import MongoClient; print(MongoClient(os.environ['MONGO_URI'])['streaming'].ecoutes.count_documents({}))"
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
